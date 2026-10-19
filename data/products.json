@@ -1,0 +1,130 @@
+{
+  "products": [
+    {
+      "name": "Halo Hoop",
+      "type": "hoops",
+      "gender": "unisex",
+      "price": 3290,
+      "image": "images/1.jpeg",
+      "isNew": false,
+      "stone": "none"
+    },
+    {
+      "name": "Petite Click Hoop",
+      "type": "hoops",
+      "gender": "women",
+      "price": 1490,
+      "image": "images/2.jpeg",
+      "isNew": true,
+      "stone": "none"
+    },
+    {
+      "name": "Rope Huggie",
+      "type": "hoops",
+      "gender": "men",
+      "price": 2890,
+      "image": "images/3.jpeg",
+      "isNew": false,
+      "stone": "none"
+    },
+    {
+      "name": "Pearl Button Stud",
+      "type": "studs",
+      "gender": "women",
+      "price": 1290,
+      "image": "images/4.jpeg",
+      "isNew": false,
+      "stone": "pearl"
+    },
+    {
+      "name": "Onyx Square Stud",
+      "type": "studs",
+      "gender": "men",
+      "price": 2490,
+      "image": "images/5.jpeg",
+      "isNew": true,
+      "stone": "onyx"
+    },
+    {
+      "name": "Moonlit Drop",
+      "type": "drops",
+      "gender": "women",
+      "price": 3590,
+      "image": "images/6.jpeg",
+      "isNew": false,
+      "stone": "sapphire"
+    },
+    {
+      "name": "Ripple Dangle",
+      "type": "drops",
+      "gender": "women",
+      "price": 1790,
+      "image": "images/7.jpeg",
+      "isNew": false,
+      "stone": "clear"
+    },
+    {
+      "name": "Comet Linear Drop",
+      "type": "drops",
+      "gender": "unisex",
+      "price": 2990,
+      "image": "images/8.jpeg",
+      "isNew": true,
+      "stone": "clear"
+    },
+    {
+      "name": "Aurora Bloom",
+      "type": "statement",
+      "gender": "women",
+      "price": 2190,
+      "image": "images/9.jpeg",
+      "isNew": true,
+      "stone": "sapphire"
+    },
+    {
+      "name": "Orbit Statement",
+      "type": "statement",
+      "gender": "unisex",
+      "price": 4190,
+      "image": "images/10.jpeg",
+      "isNew": false,
+      "stone": "clear"
+    },
+    {
+      "name": "Regal Crest",
+      "type": "statement",
+      "gender": "women",
+      "price": 2490,
+      "image": "images/11.jpeg",
+      "isNew": false,
+      "stone": "emerald"
+    },
+    {
+      "name": "Seated Buddha",
+      "type": "statues",
+      "gender": "unisex",
+      "price": 14900,
+      "image": "images/12.jpeg",
+      "isNew": true,
+      "stone": "none"
+    },
+    {
+      "name": "Royal Elephant",
+      "type": "statues",
+      "gender": "unisex",
+      "price": 8900,
+      "image": "images/13.jpeg",
+      "isNew": true,
+      "stone": "none"
+    },
+    {
+      "name": "Ganesha Idol",
+      "type": "statues",
+      "gender": "unisex",
+      "price": 17900,
+      "image": "images/14.jpeg",
+      "isNew": false,
+      "stone": "none"
+    }
+  ]
+}
