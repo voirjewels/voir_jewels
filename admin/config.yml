@@ -1,0 +1,61 @@
+backend:
+  name: github
+  repo: voirjewels/voir_jewels
+  branch: main
+  # On Netlify no extra proxy is needed: login goes through Netlify's GitHub OAuth provider (see setup steps).
+  # Only if you open /admin/ on a custom domain and login fails, add:  site_domain: YOUR-SITE.netlify.app
+
+local_backend: true        # lets you test with `npx decap-server` on your computer
+
+media_folder: images       # uploaded photos are saved here
+public_folder: images      # and referenced as images/<file>, so it works in a sub-folder too
+site_url: https://YOUR-SITE.netlify.app/   # change to your real address
+display_url: https://YOUR-SITE.netlify.app/
+
+collections:
+  - name: shop
+    label: Shop
+    files:
+      - name: products
+        label: Products
+        file: data/products.json
+        fields:
+          - label: Products
+            name: products
+            widget: list
+            label_singular: Product
+            summary: "{{fields.name}} · ₹{{fields.price}}"
+            fields:
+              - { label: Name, name: name, widget: string }
+              - label: Type
+                name: type
+                widget: select
+                options:
+                  - { label: Hoops, value: hoops }
+                  - { label: Studs, value: studs }
+                  - { label: Drops & Dangles, value: drops }
+                  - { label: Statement, value: statement }
+                  - { label: Silver Statues, value: statues }
+              - label: Gender
+                name: gender
+                widget: select
+                options:
+                  - { label: Women, value: women }
+                  - { label: Men, value: men }
+                  - { label: Unisex, value: unisex }
+              - { label: Price (₹), name: price, widget: number, value_type: int, min: 1 }
+              - { label: Photo, name: image, widget: image, required: false, hint: "Square or 4:5 photo, JPEG, under 300 KB works best" }
+              - { label: Show as New arrival, name: isNew, widget: boolean, default: false, required: false }
+              - label: Stone
+                name: stone
+                widget: select
+                default: none
+                options:
+                  - { label: None (polished metal), value: none }
+                  - { label: Clear crystal, value: clear }
+                  - { label: Ruby, value: ruby }
+                  - { label: Emerald, value: emerald }
+                  - { label: Sapphire, value: sapphire }
+                  - { label: Onyx, value: onyx }
+                  - { label: Pearl, value: pearl }
+              - { label: "In stock (leave empty for always available)", name: stock, widget: number, value_type: int, min: 0, required: false }
