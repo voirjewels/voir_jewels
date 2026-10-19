@@ -9,8 +9,8 @@ local_backend: true        # lets you test with `npx decap-server` on your compu
 
 media_folder: images       # uploaded photos are saved here
 public_folder: images      # and referenced as images/<file>, so it works in a sub-folder too
-site_url: https://YOUR-SITE.netlify.app/   # change to your real address
-display_url: https://YOUR-SITE.netlify.app/
+site_url: https://voirjewels.netlify.app/   # change to your real address
+display_url: https://voirjewels.netlify.app/
 
 collections:
   - name: shop
