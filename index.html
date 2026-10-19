@@ -778,23 +778,14 @@ var METAL={silver:['#FFFFFF','#C9CED8','#7B8494']};
 var STONE={clear:['#ffffff','#cfe8ff','#8fb5e0'],ruby:['#ff9aa8','#d6203f','#7a0a22'],emerald:['#b4f2cf','#1fa466','#0a5a35'],sapphire:['#b9d0ff','#2b55c9','#12286e'],onyx:['#6a6574','#1f1b25','#000000'],pearl:['#ffffff','#f1e9ee','#c9bcc6']};
 /* Product photos live in images/ as 1.jpeg, 2.jpeg, 3.jpeg ... in the order of this list (the hero slides use their own files).
    Columns: id, name, type, gender, new arrival (1/0), price in INR, stone, shape. Add a product by adding a row and the next numbered photo. */
-var BUILTIN=[
-[1,'Halo Hoop','hoops','unisex',0,3290,'none',1],
-[2,'Petite Click Hoop','hoops','women',1,1490,'none',2],
-[3,'Rope Huggie','hoops','men',0,2890,'none',3],
-[5,'Pearl Button Stud','studs','women',0,1290,'pearl',0],
-[6,'Onyx Square Stud','studs','men',1,2490,'onyx',0],
-[8,'Moonlit Drop','drops','women',0,3590,'sapphire',0],
-[10,'Ripple Dangle','drops','women',0,1790,'clear',0],
-[11,'Comet Linear Drop','drops','unisex',1,2990,'clear',1],
-[13,'Aurora Bloom','statement','women',1,2190,'sapphire',0],
-[14,'Orbit Statement','statement','unisex',0,4190,'clear',1],
-[15,'Regal Crest','statement','women',0,2490,'emerald',1],
-[16,'Seated Buddha','statues','unisex',1,14900,'none',0],
-[17,'Royal Elephant','statues','unisex',1,8900,'none',1],
-[18,'Ganesha Idol','statues','unisex',0,17900,'none',2]
-].map(function(a,n){return{id:a[0],name:a[1],type:a[2],gender:a[3],metal:'silver',isNew:!!a[4],price:a[5],stone:a[6],v:a[7],stock:null,img:'images/'+(n+1)+'.jpeg'}});
-var P=BUILTIN;
+/* Products are loaded from data/products.json, which you edit in the CMS at /admin/ */
+var BUILTIN=[],P=BUILTIN;
+function loadProducts(list){
+  BUILTIN=(Array.isArray(list)?list:[]).filter(function(x){return x&&x.name&&x.type&&typeof x.price==='number'}).map(function(x){
+    return{id:String(x.name).toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,''),name:String(x.name).slice(0,60),type:x.type,gender:x.gender||'unisex',metal:'silver',isNew:!!x.isNew,price:Math.max(0,Math.round(x.price)),stone:x.stone||'none',v:0,stock:typeof x.stock==='number'?x.stock:null,img:x.image||''}
+  });
+  P=BUILTIN;
+}
 var TYPES=[['all','Shop All'],['hoops','Hoops'],['studs','Studs'],['drops','Drops & Dangles'],['statement','Statement'],['statues','Silver Statues'],['silver','Silver Edit'],['new','New Arrivals']];
 var TN={hoops:'Hoops',studs:'Studs',drops:'Drops & Dangles',statement:'Statement',statues:'Statues'};
 var S={type:'all',gender:'all',metal:'all',sort:'feat',q:''};
@@ -897,13 +888,14 @@ for(var r2=0;r2<2;r2++){words.concat(words).forEach(function(w){var s=document.c
 /* ---------- browse tiles ---------- */
 function count(f){return P.filter(f).length}
 function tile(host,html,cls,fn){var b=document.createElement('button');b.className='t '+cls;b.innerHTML=html;b.onclick=fn;document.getElementById(host).appendChild(b)}
-function photo(p,cls,lazy){return '<img'+(cls?' class="'+cls+'"':'')+' src="'+p.img+'" alt="'+esc(p.name)+'" data-pid="'+sid(p.id)+'" decoding="async"'+(lazy?' loading="lazy"':'')+'>'}
+var fb=0;
+function photo(p,cls,lazy){if(!p.img)return art(p,'n'+(fb++));return '<img'+(cls?' class="'+cls+'"':'')+' src="'+p.img+'" alt="'+esc(p.name)+'" data-pid="'+sid(p.id)+'" decoding="async"'+(lazy?' loading="lazy"':'')+'>'}
 /* a missing photo falls back to the drawn SVG so the page never shows a broken image */
-var fb=0;document.addEventListener('error',function(e){var t=e.target;if(!t||t.tagName!=='IMG'||!t.hasAttribute('data-pid'))return;var p=findP(t.getAttribute('data-pid'));if(!p)return;var d=document.createElement('div');d.innerHTML=art(p,'fb'+(fb++));var s=d.firstChild;if(t.classList.contains('art'))s.setAttribute('class','art');t.replaceWith(s)},true);
+document.addEventListener('error',function(e){var t=e.target;if(!t||t.tagName!=='IMG'||!t.hasAttribute('data-pid'))return;var p=findP(t.getAttribute('data-pid'));if(!p)return;var d=document.createElement('div');d.innerHTML=art(p,'fb'+(fb++));var s=d.firstChild;if(t.classList.contains('art'))s.setAttribute('class','art');t.replaceWith(s)},true);
 function buildTiles(){
   ['tProduct','tGender'].forEach(function(h){document.getElementById(h).innerHTML=''});
   ['hoops','studs','drops','statement','statues'].forEach(function(t){
-    var s=P.filter(function(p){return p.type===t})[0];
+    var s=P.filter(function(p){return p.type===t})[0];if(!s)return;
     tile('tProduct',photo(s,'art',true)+'<span class="lab"><b>'+TN[t]+'</b><i>'+count(function(p){return p.type===t})+' styles</i></span>','',function(){set('type',t,true)});
   });
   [['women','Women'],['men','Men'],['unisex','Unisex']].forEach(function(a){
@@ -1243,7 +1235,13 @@ if(!still)setInterval(function(){
 },100);
 dots[0].style.setProperty('--p','0%');
 
-sync();buildTiles();buildCar();render();ui();syncCounts();
+function start(){
+  /* drop saved bag/wish entries for products that no longer exist */
+  [cart,wished].forEach(function(o,i){Object.keys(o).forEach(function(k){if(!findP(k))delete o[k]});svJ(i?'voir-wish':'voir-cart',o)});
+  buildTiles();buildCar();render();syncCounts();
+}
+sync();ui();
+fetch('data/products.json',{cache:'no-cache'}).then(function(r){if(!r.ok)throw 0;return r.json()}).then(function(d){loadProducts(d.products)},function(){loadProducts([])}).then(start);
 })();
 </script>
 </body>
