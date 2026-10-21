@@ -1,51 +1,61 @@
+# VoirJewels admin (Decap CMS).
+# One file per category in data/. Pick a category in the left menu, tap "Add Product", fill the card and press Publish.
 backend:
   name: github
   repo: voirjewels/voir_jewels
   branch: main
-  # On Netlify no extra proxy is needed: login goes through Netlify's GitHub OAuth provider (see setup steps).
+  # On Netlify no extra proxy is needed: login goes through Netlify's GitHub OAuth provider.
   # Only if you open /admin/ on a custom domain and login fails, add:  site_domain: YOUR-SITE.netlify.app
 
 local_backend: true        # lets you test with `npx decap-server` on your computer
 
 media_folder: images       # uploaded photos are saved here
 public_folder: images      # and referenced as images/<file>, so it works in a sub-folder too
-site_url: https://voirjewels.netlify.app/   # change to your real address
+site_url: https://voirjewels.netlify.app/
 display_url: https://voirjewels.netlify.app/
+locale: en
 
 collections:
-  - name: shop
-    label: Shop
+  - name: earrings
+    label: "Earrings"
+    description: "Hoops, studs, drops and statement earrings"
+    editor:
+      preview: false
     files:
-      - name: products
-        label: Products
-        file: data/products.json
+      - name: earrings
+        label: "Earrings"
+        file: data/earrings.json
         fields:
           - label: Products
             name: products
             widget: list
             label_singular: Product
             summary: "{{fields.name}} · ₹{{fields.price}}"
+            add_to_top: true
+            collapsed: true
             fields:
-              - { label: Name, name: name, widget: string }
+              - { label: Name, name: name, widget: string, hint: "Shown on the card, e.g. Solitaire Ring" }
               - label: Type
                 name: type
                 widget: select
-                options:
-                  - { label: Hoops, value: hoops }
-                  - { label: Studs, value: studs }
-                  - { label: Drops & Dangles, value: drops }
-                  - { label: Statement, value: statement }
-                  - { label: Silver Statues, value: statues }
-              - label: Gender
+                default: hoops
+                options: [{ label: "Hoops", value: hoops }, { label: "Studs", value: studs }, { label: "Drops & Dangles", value: drops }, { label: "Statement", value: statement }]
+              - label: For
                 name: gender
                 widget: select
-                options:
-                  - { label: Women, value: women }
-                  - { label: Men, value: men }
-                  - { label: Unisex, value: unisex }
+                default: women
+                hint: "Unisex pieces show under both Women and Men"
+                options: [{ label: Women, value: women }, { label: Men, value: men }, { label: Unisex, value: unisex }]
               - { label: Price (₹), name: price, widget: number, value_type: int, min: 1 }
-              - { label: Photo, name: image, widget: image, required: false, hint: "Square or 4:5 photo, JPEG, under 300 KB works best" }
-              - { label: Show as New arrival, name: isNew, widget: boolean, default: false, required: false }
+              - { label: "Original price (₹)", name: mrp, widget: number, value_type: int, min: 1, required: false, hint: "Optional. Must be higher than the price. Shows a strike-through and the discount" }
+              - { label: Main photo, name: image, widget: image, required: false, hint: "Square or 4:5 JPEG under 300 KB works best" }
+              - label: More photos
+                name: gallery
+                widget: list
+                required: false
+                hint: "Optional extra angles. Add one photo per row"
+                field: { label: Photo, name: image, widget: image }
+              - { label: Description, name: description, widget: text, required: false, hint: "Optional. Leave empty to use the standard description for this category" }
               - label: Stone
                 name: stone
                 widget: select
@@ -58,4 +68,471 @@ collections:
                   - { label: Sapphire, value: sapphire }
                   - { label: Onyx, value: onyx }
                   - { label: Pearl, value: pearl }
+              - label: Silver purity
+                name: purity
+                widget: select
+                default: "925"
+                options: [{ label: "925 sterling silver", value: "925" }, { label: "999 fine silver", value: "999" }]
+              - { label: Weight (grams), name: weight, widget: number, value_type: float, min: 0, required: false }
+              - { label: "Size or length", name: size, widget: string, required: false, hint: "Optional, e.g. Ring sizes 6, 7, 8 or Length 10 inch" }
+              - { label: "Sold as", name: sold_as, widget: string, required: false, hint: "Optional, e.g. One pair, One piece, Set of 2" }
               - { label: "In stock (leave empty for always available)", name: stock, widget: number, value_type: int, min: 0, required: false }
+              - { label: Show as New arrival, name: isNew, widget: boolean, default: false, required: false }
+              - { label: Show on website, name: show, widget: boolean, default: true, required: false, hint: "Turn off to hide a product without deleting it" }
+  - name: rings
+    label: "Rings"
+    description: "Silver rings for women, men and unisex"
+    editor:
+      preview: false
+    files:
+      - name: rings
+        label: "Rings"
+        file: data/rings.json
+        fields:
+          - label: Products
+            name: products
+            widget: list
+            label_singular: Product
+            summary: "{{fields.name}} · ₹{{fields.price}}"
+            add_to_top: true
+            collapsed: true
+            fields:
+              - { label: Name, name: name, widget: string, hint: "Shown on the card, e.g. Solitaire Ring" }
+              - { label: Type, name: type, widget: hidden, default: rings }
+              - label: For
+                name: gender
+                widget: select
+                default: women
+                hint: "Unisex pieces show under both Women and Men"
+                options: [{ label: Women, value: women }, { label: Men, value: men }, { label: Unisex, value: unisex }]
+              - { label: Price (₹), name: price, widget: number, value_type: int, min: 1 }
+              - { label: "Original price (₹)", name: mrp, widget: number, value_type: int, min: 1, required: false, hint: "Optional. Must be higher than the price. Shows a strike-through and the discount" }
+              - { label: Main photo, name: image, widget: image, required: false, hint: "Square or 4:5 JPEG under 300 KB works best" }
+              - label: More photos
+                name: gallery
+                widget: list
+                required: false
+                hint: "Optional extra angles. Add one photo per row"
+                field: { label: Photo, name: image, widget: image }
+              - { label: Description, name: description, widget: text, required: false, hint: "Optional. Leave empty to use the standard description for this category" }
+              - label: Stone
+                name: stone
+                widget: select
+                default: none
+                options:
+                  - { label: None (polished metal), value: none }
+                  - { label: Clear crystal, value: clear }
+                  - { label: Ruby, value: ruby }
+                  - { label: Emerald, value: emerald }
+                  - { label: Sapphire, value: sapphire }
+                  - { label: Onyx, value: onyx }
+                  - { label: Pearl, value: pearl }
+              - label: Silver purity
+                name: purity
+                widget: select
+                default: "925"
+                options: [{ label: "925 sterling silver", value: "925" }, { label: "999 fine silver", value: "999" }]
+              - { label: Weight (grams), name: weight, widget: number, value_type: float, min: 0, required: false }
+              - { label: "Size or length", name: size, widget: string, required: false, hint: "Optional, e.g. Ring sizes 6, 7, 8 or Length 10 inch" }
+              - { label: "Sold as", name: sold_as, widget: string, required: false, hint: "Optional, e.g. One pair, One piece, Set of 2" }
+              - { label: "In stock (leave empty for always available)", name: stock, widget: number, value_type: int, min: 0, required: false }
+              - { label: Show as New arrival, name: isNew, widget: boolean, default: false, required: false }
+              - { label: Show on website, name: show, widget: boolean, default: true, required: false, hint: "Turn off to hide a product without deleting it" }
+  - name: anklets
+    label: "Payal (Anklets)"
+    description: "Silver payal and anklets"
+    editor:
+      preview: false
+    files:
+      - name: anklets
+        label: "Payal (Anklets)"
+        file: data/anklets.json
+        fields:
+          - label: Products
+            name: products
+            widget: list
+            label_singular: Product
+            summary: "{{fields.name}} · ₹{{fields.price}}"
+            add_to_top: true
+            collapsed: true
+            fields:
+              - { label: Name, name: name, widget: string, hint: "Shown on the card, e.g. Solitaire Ring" }
+              - { label: Type, name: type, widget: hidden, default: anklets }
+              - label: For
+                name: gender
+                widget: select
+                default: women
+                hint: "Unisex pieces show under both Women and Men"
+                options: [{ label: Women, value: women }, { label: Men, value: men }, { label: Unisex, value: unisex }]
+              - { label: Price (₹), name: price, widget: number, value_type: int, min: 1 }
+              - { label: "Original price (₹)", name: mrp, widget: number, value_type: int, min: 1, required: false, hint: "Optional. Must be higher than the price. Shows a strike-through and the discount" }
+              - { label: Main photo, name: image, widget: image, required: false, hint: "Square or 4:5 JPEG under 300 KB works best" }
+              - label: More photos
+                name: gallery
+                widget: list
+                required: false
+                hint: "Optional extra angles. Add one photo per row"
+                field: { label: Photo, name: image, widget: image }
+              - { label: Description, name: description, widget: text, required: false, hint: "Optional. Leave empty to use the standard description for this category" }
+              - label: Stone
+                name: stone
+                widget: select
+                default: none
+                options:
+                  - { label: None (polished metal), value: none }
+                  - { label: Clear crystal, value: clear }
+                  - { label: Ruby, value: ruby }
+                  - { label: Emerald, value: emerald }
+                  - { label: Sapphire, value: sapphire }
+                  - { label: Onyx, value: onyx }
+                  - { label: Pearl, value: pearl }
+              - label: Silver purity
+                name: purity
+                widget: select
+                default: "925"
+                options: [{ label: "925 sterling silver", value: "925" }, { label: "999 fine silver", value: "999" }]
+              - { label: Weight (grams), name: weight, widget: number, value_type: float, min: 0, required: false }
+              - { label: "Size or length", name: size, widget: string, required: false, hint: "Optional, e.g. Ring sizes 6, 7, 8 or Length 10 inch" }
+              - { label: "Sold as", name: sold_as, widget: string, required: false, hint: "Optional, e.g. One pair, One piece, Set of 2" }
+              - { label: "In stock (leave empty for always available)", name: stock, widget: number, value_type: int, min: 0, required: false }
+              - { label: Show as New arrival, name: isNew, widget: boolean, default: false, required: false }
+              - { label: Show on website, name: show, widget: boolean, default: true, required: false, hint: "Turn off to hide a product without deleting it" }
+  - name: bracelets
+    label: "Bracelets"
+    description: "Bracelets, bangles and charm bracelets"
+    editor:
+      preview: false
+    files:
+      - name: bracelets
+        label: "Bracelets"
+        file: data/bracelets.json
+        fields:
+          - label: Products
+            name: products
+            widget: list
+            label_singular: Product
+            summary: "{{fields.name}} · ₹{{fields.price}}"
+            add_to_top: true
+            collapsed: true
+            fields:
+              - { label: Name, name: name, widget: string, hint: "Shown on the card, e.g. Solitaire Ring" }
+              - { label: Type, name: type, widget: hidden, default: bracelets }
+              - label: For
+                name: gender
+                widget: select
+                default: women
+                hint: "Unisex pieces show under both Women and Men"
+                options: [{ label: Women, value: women }, { label: Men, value: men }, { label: Unisex, value: unisex }]
+              - { label: Price (₹), name: price, widget: number, value_type: int, min: 1 }
+              - { label: "Original price (₹)", name: mrp, widget: number, value_type: int, min: 1, required: false, hint: "Optional. Must be higher than the price. Shows a strike-through and the discount" }
+              - { label: Main photo, name: image, widget: image, required: false, hint: "Square or 4:5 JPEG under 300 KB works best" }
+              - label: More photos
+                name: gallery
+                widget: list
+                required: false
+                hint: "Optional extra angles. Add one photo per row"
+                field: { label: Photo, name: image, widget: image }
+              - { label: Description, name: description, widget: text, required: false, hint: "Optional. Leave empty to use the standard description for this category" }
+              - label: Stone
+                name: stone
+                widget: select
+                default: none
+                options:
+                  - { label: None (polished metal), value: none }
+                  - { label: Clear crystal, value: clear }
+                  - { label: Ruby, value: ruby }
+                  - { label: Emerald, value: emerald }
+                  - { label: Sapphire, value: sapphire }
+                  - { label: Onyx, value: onyx }
+                  - { label: Pearl, value: pearl }
+              - label: Silver purity
+                name: purity
+                widget: select
+                default: "925"
+                options: [{ label: "925 sterling silver", value: "925" }, { label: "999 fine silver", value: "999" }]
+              - { label: Weight (grams), name: weight, widget: number, value_type: float, min: 0, required: false }
+              - { label: "Size or length", name: size, widget: string, required: false, hint: "Optional, e.g. Ring sizes 6, 7, 8 or Length 10 inch" }
+              - { label: "Sold as", name: sold_as, widget: string, required: false, hint: "Optional, e.g. One pair, One piece, Set of 2" }
+              - { label: "In stock (leave empty for always available)", name: stock, widget: number, value_type: int, min: 0, required: false }
+              - { label: Show as New arrival, name: isNew, widget: boolean, default: false, required: false }
+              - { label: Show on website, name: show, widget: boolean, default: true, required: false, hint: "Turn off to hide a product without deleting it" }
+  - name: necklaces
+    label: "Chains & Necklaces"
+    description: "Silver chains and necklaces"
+    editor:
+      preview: false
+    files:
+      - name: necklaces
+        label: "Chains & Necklaces"
+        file: data/necklaces.json
+        fields:
+          - label: Products
+            name: products
+            widget: list
+            label_singular: Product
+            summary: "{{fields.name}} · ₹{{fields.price}}"
+            add_to_top: true
+            collapsed: true
+            fields:
+              - { label: Name, name: name, widget: string, hint: "Shown on the card, e.g. Solitaire Ring" }
+              - { label: Type, name: type, widget: hidden, default: necklaces }
+              - label: For
+                name: gender
+                widget: select
+                default: women
+                hint: "Unisex pieces show under both Women and Men"
+                options: [{ label: Women, value: women }, { label: Men, value: men }, { label: Unisex, value: unisex }]
+              - { label: Price (₹), name: price, widget: number, value_type: int, min: 1 }
+              - { label: "Original price (₹)", name: mrp, widget: number, value_type: int, min: 1, required: false, hint: "Optional. Must be higher than the price. Shows a strike-through and the discount" }
+              - { label: Main photo, name: image, widget: image, required: false, hint: "Square or 4:5 JPEG under 300 KB works best" }
+              - label: More photos
+                name: gallery
+                widget: list
+                required: false
+                hint: "Optional extra angles. Add one photo per row"
+                field: { label: Photo, name: image, widget: image }
+              - { label: Description, name: description, widget: text, required: false, hint: "Optional. Leave empty to use the standard description for this category" }
+              - label: Stone
+                name: stone
+                widget: select
+                default: none
+                options:
+                  - { label: None (polished metal), value: none }
+                  - { label: Clear crystal, value: clear }
+                  - { label: Ruby, value: ruby }
+                  - { label: Emerald, value: emerald }
+                  - { label: Sapphire, value: sapphire }
+                  - { label: Onyx, value: onyx }
+                  - { label: Pearl, value: pearl }
+              - label: Silver purity
+                name: purity
+                widget: select
+                default: "925"
+                options: [{ label: "925 sterling silver", value: "925" }, { label: "999 fine silver", value: "999" }]
+              - { label: Weight (grams), name: weight, widget: number, value_type: float, min: 0, required: false }
+              - { label: "Size or length", name: size, widget: string, required: false, hint: "Optional, e.g. Ring sizes 6, 7, 8 or Length 10 inch" }
+              - { label: "Sold as", name: sold_as, widget: string, required: false, hint: "Optional, e.g. One pair, One piece, Set of 2" }
+              - { label: "In stock (leave empty for always available)", name: stock, widget: number, value_type: int, min: 0, required: false }
+              - { label: Show as New arrival, name: isNew, widget: boolean, default: false, required: false }
+              - { label: Show on website, name: show, widget: boolean, default: true, required: false, hint: "Turn off to hide a product without deleting it" }
+  - name: pendants
+    label: "Pendants"
+    description: "Silver pendants and lockets"
+    editor:
+      preview: false
+    files:
+      - name: pendants
+        label: "Pendants"
+        file: data/pendants.json
+        fields:
+          - label: Products
+            name: products
+            widget: list
+            label_singular: Product
+            summary: "{{fields.name}} · ₹{{fields.price}}"
+            add_to_top: true
+            collapsed: true
+            fields:
+              - { label: Name, name: name, widget: string, hint: "Shown on the card, e.g. Solitaire Ring" }
+              - { label: Type, name: type, widget: hidden, default: pendants }
+              - label: For
+                name: gender
+                widget: select
+                default: women
+                hint: "Unisex pieces show under both Women and Men"
+                options: [{ label: Women, value: women }, { label: Men, value: men }, { label: Unisex, value: unisex }]
+              - { label: Price (₹), name: price, widget: number, value_type: int, min: 1 }
+              - { label: "Original price (₹)", name: mrp, widget: number, value_type: int, min: 1, required: false, hint: "Optional. Must be higher than the price. Shows a strike-through and the discount" }
+              - { label: Main photo, name: image, widget: image, required: false, hint: "Square or 4:5 JPEG under 300 KB works best" }
+              - label: More photos
+                name: gallery
+                widget: list
+                required: false
+                hint: "Optional extra angles. Add one photo per row"
+                field: { label: Photo, name: image, widget: image }
+              - { label: Description, name: description, widget: text, required: false, hint: "Optional. Leave empty to use the standard description for this category" }
+              - label: Stone
+                name: stone
+                widget: select
+                default: none
+                options:
+                  - { label: None (polished metal), value: none }
+                  - { label: Clear crystal, value: clear }
+                  - { label: Ruby, value: ruby }
+                  - { label: Emerald, value: emerald }
+                  - { label: Sapphire, value: sapphire }
+                  - { label: Onyx, value: onyx }
+                  - { label: Pearl, value: pearl }
+              - label: Silver purity
+                name: purity
+                widget: select
+                default: "925"
+                options: [{ label: "925 sterling silver", value: "925" }, { label: "999 fine silver", value: "999" }]
+              - { label: Weight (grams), name: weight, widget: number, value_type: float, min: 0, required: false }
+              - { label: "Size or length", name: size, widget: string, required: false, hint: "Optional, e.g. Ring sizes 6, 7, 8 or Length 10 inch" }
+              - { label: "Sold as", name: sold_as, widget: string, required: false, hint: "Optional, e.g. One pair, One piece, Set of 2" }
+              - { label: "In stock (leave empty for always available)", name: stock, widget: number, value_type: int, min: 0, required: false }
+              - { label: Show as New arrival, name: isNew, widget: boolean, default: false, required: false }
+              - { label: Show on website, name: show, widget: boolean, default: true, required: false, hint: "Turn off to hide a product without deleting it" }
+  - name: statues
+    label: "Silver Statues"
+    description: "Silver idols, statues and figurines"
+    editor:
+      preview: false
+    files:
+      - name: statues
+        label: "Silver Statues"
+        file: data/statues.json
+        fields:
+          - label: Products
+            name: products
+            widget: list
+            label_singular: Product
+            summary: "{{fields.name}} · ₹{{fields.price}}"
+            add_to_top: true
+            collapsed: true
+            fields:
+              - { label: Name, name: name, widget: string, hint: "Shown on the card, e.g. Solitaire Ring" }
+              - { label: Type, name: type, widget: hidden, default: statues }
+              - { label: Collection, name: gender, widget: hidden, default: home }
+              - { label: Price (₹), name: price, widget: number, value_type: int, min: 1 }
+              - { label: "Original price (₹)", name: mrp, widget: number, value_type: int, min: 1, required: false, hint: "Optional. Must be higher than the price. Shows a strike-through and the discount" }
+              - { label: Main photo, name: image, widget: image, required: false, hint: "Square or 4:5 JPEG under 300 KB works best" }
+              - label: More photos
+                name: gallery
+                widget: list
+                required: false
+                hint: "Optional extra angles. Add one photo per row"
+                field: { label: Photo, name: image, widget: image }
+              - { label: Description, name: description, widget: text, required: false, hint: "Optional. Leave empty to use the standard description for this category" }
+              - label: Stone
+                name: stone
+                widget: select
+                default: none
+                options:
+                  - { label: None (polished metal), value: none }
+                  - { label: Clear crystal, value: clear }
+                  - { label: Ruby, value: ruby }
+                  - { label: Emerald, value: emerald }
+                  - { label: Sapphire, value: sapphire }
+                  - { label: Onyx, value: onyx }
+                  - { label: Pearl, value: pearl }
+              - label: Silver purity
+                name: purity
+                widget: select
+                default: "925"
+                options: [{ label: "925 sterling silver", value: "925" }, { label: "999 fine silver", value: "999" }]
+              - { label: Weight (grams), name: weight, widget: number, value_type: float, min: 0, required: false }
+              - { label: "Size or length", name: size, widget: string, required: false, hint: "Optional, e.g. Ring sizes 6, 7, 8 or Length 10 inch" }
+              - { label: "Sold as", name: sold_as, widget: string, required: false, hint: "Optional, e.g. One pair, One piece, Set of 2" }
+              - { label: "In stock (leave empty for always available)", name: stock, widget: number, value_type: int, min: 0, required: false }
+              - { label: Show as New arrival, name: isNew, widget: boolean, default: false, required: false }
+              - { label: Show on website, name: show, widget: boolean, default: true, required: false, hint: "Turn off to hide a product without deleting it" }
+  - name: pooja
+    label: "Pooja Essentials"
+    description: "Silver diyas, plates, kalash and pooja sets"
+    editor:
+      preview: false
+    files:
+      - name: pooja
+        label: "Pooja Essentials"
+        file: data/pooja.json
+        fields:
+          - label: Products
+            name: products
+            widget: list
+            label_singular: Product
+            summary: "{{fields.name}} · ₹{{fields.price}}"
+            add_to_top: true
+            collapsed: true
+            fields:
+              - { label: Name, name: name, widget: string, hint: "Shown on the card, e.g. Solitaire Ring" }
+              - { label: Type, name: type, widget: hidden, default: pooja }
+              - { label: Collection, name: gender, widget: hidden, default: home }
+              - { label: Price (₹), name: price, widget: number, value_type: int, min: 1 }
+              - { label: "Original price (₹)", name: mrp, widget: number, value_type: int, min: 1, required: false, hint: "Optional. Must be higher than the price. Shows a strike-through and the discount" }
+              - { label: Main photo, name: image, widget: image, required: false, hint: "Square or 4:5 JPEG under 300 KB works best" }
+              - label: More photos
+                name: gallery
+                widget: list
+                required: false
+                hint: "Optional extra angles. Add one photo per row"
+                field: { label: Photo, name: image, widget: image }
+              - { label: Description, name: description, widget: text, required: false, hint: "Optional. Leave empty to use the standard description for this category" }
+              - label: Stone
+                name: stone
+                widget: select
+                default: none
+                options:
+                  - { label: None (polished metal), value: none }
+                  - { label: Clear crystal, value: clear }
+                  - { label: Ruby, value: ruby }
+                  - { label: Emerald, value: emerald }
+                  - { label: Sapphire, value: sapphire }
+                  - { label: Onyx, value: onyx }
+                  - { label: Pearl, value: pearl }
+              - label: Silver purity
+                name: purity
+                widget: select
+                default: "925"
+                options: [{ label: "925 sterling silver", value: "925" }, { label: "999 fine silver", value: "999" }]
+              - { label: Weight (grams), name: weight, widget: number, value_type: float, min: 0, required: false }
+              - { label: "Size or length", name: size, widget: string, required: false, hint: "Optional, e.g. Ring sizes 6, 7, 8 or Length 10 inch" }
+              - { label: "Sold as", name: sold_as, widget: string, required: false, hint: "Optional, e.g. One pair, One piece, Set of 2" }
+              - { label: "In stock (leave empty for always available)", name: stock, widget: number, value_type: int, min: 0, required: false }
+              - { label: Show as New arrival, name: isNew, widget: boolean, default: false, required: false }
+              - { label: Show on website, name: show, widget: boolean, default: true, required: false, hint: "Turn off to hide a product without deleting it" }
+  - name: coins
+    label: "Silver Coins"
+    description: "Silver coins and bars for gifting"
+    editor:
+      preview: false
+    files:
+      - name: coins
+        label: "Silver Coins"
+        file: data/coins.json
+        fields:
+          - label: Products
+            name: products
+            widget: list
+            label_singular: Product
+            summary: "{{fields.name}} · ₹{{fields.price}}"
+            add_to_top: true
+            collapsed: true
+            fields:
+              - { label: Name, name: name, widget: string, hint: "Shown on the card, e.g. Solitaire Ring" }
+              - { label: Type, name: type, widget: hidden, default: coins }
+              - { label: Collection, name: gender, widget: hidden, default: home }
+              - { label: Price (₹), name: price, widget: number, value_type: int, min: 1 }
+              - { label: "Original price (₹)", name: mrp, widget: number, value_type: int, min: 1, required: false, hint: "Optional. Must be higher than the price. Shows a strike-through and the discount" }
+              - { label: Main photo, name: image, widget: image, required: false, hint: "Square or 4:5 JPEG under 300 KB works best" }
+              - label: More photos
+                name: gallery
+                widget: list
+                required: false
+                hint: "Optional extra angles. Add one photo per row"
+                field: { label: Photo, name: image, widget: image }
+              - { label: Description, name: description, widget: text, required: false, hint: "Optional. Leave empty to use the standard description for this category" }
+              - label: Stone
+                name: stone
+                widget: select
+                default: none
+                options:
+                  - { label: None (polished metal), value: none }
+                  - { label: Clear crystal, value: clear }
+                  - { label: Ruby, value: ruby }
+                  - { label: Emerald, value: emerald }
+                  - { label: Sapphire, value: sapphire }
+                  - { label: Onyx, value: onyx }
+                  - { label: Pearl, value: pearl }
+              - label: Silver purity
+                name: purity
+                widget: select
+                default: "999"
+                options: [{ label: "925 sterling silver", value: "925" }, { label: "999 fine silver", value: "999" }]
+              - { label: Weight (grams), name: weight, widget: number, value_type: float, min: 0, required: false }
+              - { label: "Size or length", name: size, widget: string, required: false, hint: "Optional, e.g. Ring sizes 6, 7, 8 or Length 10 inch" }
+              - { label: "Sold as", name: sold_as, widget: string, required: false, hint: "Optional, e.g. One pair, One piece, Set of 2" }
+              - { label: "In stock (leave empty for always available)", name: stock, widget: number, value_type: int, min: 0, required: false }
+              - { label: Show as New arrival, name: isNew, widget: boolean, default: false, required: false }
+              - { label: Show on website, name: show, widget: boolean, default: true, required: false, hint: "Turn off to hide a product without deleting it" }
