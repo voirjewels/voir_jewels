@@ -8,6 +8,15 @@
       "type": "hoops",
       "price": 7,
       "image": "images/10.jpeg"
+    },
+    {
+      "isNew": true,
+      "stone": "clear",
+      "name": "Bow elegance Ring",
+      "gender": "women",
+      "price": 899,
+      "image": "images/4.jpeg",
+      "type": "statement"
     }
   ]
 }
