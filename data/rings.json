@@ -1,13 +1,38 @@
 {
   "products": [
     {
+      "purity": "925",
+      "gender": "women",
+      "stone": "none",
+      "price": 199,
+      "name": "Solitaire Ring",
+      "mrp": 499,
+      "isNew": false,
+      "type": "rings",
+      "image": "images/2.jpeg",
+      "show": true
+    },
+    {
+      "purity": "925",
+      "gender": "women",
+      "stone": "ruby",
+      "price": 99,
+      "name": "Ring",
+      "mrp": 299,
+      "isNew": false,
+      "type": "rings",
+      "image": "images/1.jpeg",
+      "show": true
+    },
+    {
       "isNew": true,
       "stone": "clear",
       "name": "Bow elegance Ring",
       "gender": "women",
       "type": "rings",
       "price": 899,
-      "image": "images/4.jpeg"
+      "image": "images/4.jpeg",
+      "purity": "925"
     }
   ]
 }
