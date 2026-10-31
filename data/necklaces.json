@@ -1,3 +1,27 @@
 {
-  "products": []
+  "products": [
+    {
+      "purity": "925",
+      "gender": "women",
+      "stone": "none",
+      "price": 99,
+      "name": "Women pendant",
+      "isNew": false,
+      "type": "necklaces",
+      "image": "images/7.jpeg",
+      "show": true
+    },
+    {
+      "purity": "925",
+      "gender": "men",
+      "stone": "none",
+      "price": 199,
+      "name": "Chain",
+      "mrp": 299,
+      "isNew": false,
+      "type": "necklaces",
+      "image": "images/8.jpeg",
+      "show": true
+    }
+  ]
 }
