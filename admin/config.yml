@@ -7,7 +7,8 @@ backend:
   # On Netlify no extra proxy is needed: login goes through Netlify's GitHub OAuth provider.
   # Only if you open /admin/ on a custom domain and login fails, add:  site_domain: YOUR-SITE.netlify.app
 
-local_backend: true        # lets you test with `npx decap-server` on your computer
+# For local testing only: uncomment, run `npx decap-server`, open /admin/ on localhost, then re-comment before pushing.
+# local_backend: true
 
 media_folder: images       # uploaded photos are saved here
 public_folder: images      # and referenced as images/<file>, so it works in a sub-folder too

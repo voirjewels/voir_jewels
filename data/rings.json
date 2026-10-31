@@ -1,0 +1,13 @@
+{
+  "products": [
+    {
+      "isNew": true,
+      "stone": "clear",
+      "name": "Bow elegance Ring",
+      "gender": "women",
+      "type": "rings",
+      "price": 899,
+      "image": "images/4.jpeg"
+    }
+  ]
+}

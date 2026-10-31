@@ -65,7 +65,6 @@ nav.main a:hover{color:var(--fg)}
 .hero h1{font-size:clamp(3rem,7.4vw,6.2rem);margin-bottom:22px}
 .hero h1 em{font-style:italic}
 .hero .lede{font-size:1.1rem;margin-bottom:32px}
-.cta{display:flex;gap:12px;flex-wrap:wrap}
 .btn{display:inline-flex;align-items:center;gap:8px;padding:14px 28px;border-radius:99px;background:var(--accent);color:var(--on-accent);text-decoration:none;font-weight:500;border:1px solid var(--accent);transition:transform .2s,box-shadow .2s}
 .btn:hover{transform:translateY(-2px);box-shadow:0 10px 24px var(--shadow)}
 .btn.ghost{background:transparent;color:var(--fg);border-color:var(--line)}
@@ -88,7 +87,6 @@ nav.main a:hover{color:var(--fg)}
 .tiles{display:grid;gap:14px}
 .tiles.p4{grid-template-columns:repeat(4,1fr)}
 .tiles.p3{grid-template-columns:repeat(3,1fr)}
-.tiles.p2{grid-template-columns:repeat(2,1fr)}
 .t{position:relative;border-radius:18px;background:var(--tile);overflow:hidden;text-align:left;display:flex;flex-direction:column;justify-content:flex-end;min-height:120px;transition:transform .35s,box-shadow .35s}
 .t:hover{transform:translateY(-4px);box-shadow:0 16px 30px var(--shadow)}
 .t svg.art{width:100%;display:block;transition:transform .6s}
@@ -102,7 +100,6 @@ nav.main a:hover{color:var(--fg)}
 .t.sw:hover::before{transform:scale(1.15) rotate(6deg)}
 .t.sw>*{position:relative}
 .t.gold::before{background:linear-gradient(135deg,#FBEBB5,#D9A845 55%,#8E6220)}
-.t.silv::before{background:linear-gradient(135deg,#fff,#C9CED8 55%,#7B8494)}
 .t.sw{color:#1D1622}
 .t.sw .lab i,.t.sw.word i{color:#3a3040}
 
@@ -605,9 +602,77 @@ footer .brand .j{color:var(--foot-mut)}
   .d-item{grid-template-columns:72px 1fr;gap:12px}.d-th{width:72px;height:72px}
 }
 
+/* ===== v6: double-stairs preloader + sticky card stack =====
+   Both effects are original vanilla rebuilds of Skiper UI skiper10 (double stairs preloader)
+   and skiper17 (card stack with gsap and rotate). Credit: https://skiper-ui.com */
+
+/* preloader: six columns, each split in two. Top halves lift away left to right, bottom halves drop away right to left.
+   The overlay hides itself with CSS alone, so a script error can never trap the page. */
+html.pre-on{overflow:hidden;scrollbar-gutter:stable}
+html.pre-wait .hs-slide.on .ch,html.pre-wait .hs-slide.on .hs-up{animation-play-state:paused}
+#pre{position:fixed;inset:0;z-index:1000;display:grid;place-items:center;overflow:hidden;animation:preGone .01s linear 3.1s forwards}
+@keyframes preGone{to{visibility:hidden}}
+.pre-col{position:absolute;top:0;bottom:0;left:calc(var(--i)*(100%/6));width:calc(100%/6 + 1px)}
+.pre-col::before,.pre-col::after{content:"";position:absolute;left:0;right:0;height:calc(50% + 1px);background:#0d0a10;box-shadow:inset 1px 0 0 rgba(227,190,123,.14);will-change:transform;animation-duration:.85s;animation-timing-function:cubic-bezier(.76,0,.24,1);animation-fill-mode:forwards}
+.pre-col::before{top:0;animation-name:preUp;animation-delay:calc(1.7s + var(--i)*.09s)}
+.pre-col::after{bottom:0;animation-name:preDown;animation-delay:calc(1.7s + (5 - var(--i))*.09s)}
+@keyframes preUp{to{transform:translateY(-101%)}}
+@keyframes preDown{to{transform:translateY(101%)}}
+.pre-mid{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;gap:26px;animation:preBrand 1.6s cubic-bezier(.2,.8,.2,1) .1s both}
+@keyframes preBrand{0%{opacity:0;transform:translateY(14px);filter:blur(6px)}28%{opacity:1;transform:none;filter:none}78%{opacity:1;transform:none;filter:none}100%{opacity:0;transform:translateY(-10px);filter:none}}
+#pre .brand{color:#F3EBF0}
+#pre .brand .v{font-size:clamp(2.6rem,10vw,5.2rem)}
+#pre .brand .j{color:#cdbfd6;font-size:clamp(.5rem,1.6vw,.8rem);margin-top:14px}
+.pre-bar{display:block;width:min(180px,40vw);height:1px;background:rgba(243,235,240,.2);overflow:hidden}
+.pre-bar::after{content:"";display:block;height:100%;background:#E3BE7B;transform-origin:left;animation:preBar 1.5s cubic-bezier(.65,0,.35,1) .1s both}
+@keyframes preBar{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+@media (prefers-reduced-motion:reduce){#pre{display:none!important}}
+
+/* sticky card stack: every card sticks under the header, the next one slides over it,
+   and GSAP scales and tilts the card underneath as that happens. Without GSAP it still stacks. */
+.sk{--hh:86px;--skt:calc(env(safe-area-inset-top,0px) + var(--hh) + 18px);position:relative}
+@media (max-width:980px){.sk{--hh:72px}}
+@media (max-width:420px){.sk{--hh:64px}}
+.sk-item{position:sticky;top:var(--skt);height:clamp(420px,calc(100vh - var(--hh) - 44px),680px)}
+@supports (height:100svh){.sk-item{height:clamp(420px,calc(100svh - var(--hh) - 44px),680px)}}
+.sk-card{position:relative;height:100%;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);background:var(--tile);border:1px solid var(--line);border-radius:2px;overflow:hidden;box-shadow:0 24px 60px var(--shadow);transform-origin:50% 50%;will-change:transform}
+.sk-txt{display:flex;flex-direction:column;justify-content:space-between;gap:20px;padding:clamp(22px,4vw,48px);min-width:0}
+.sk-cnt{display:block;margin-bottom:14px;font-size:.85rem;color:var(--muted)}
+.sk-txt h3{font-size:clamp(2.2rem,5vw,4rem)}
+.sk-txt p{margin:0;color:var(--muted);max-width:34ch}
+.sk-img{position:relative;overflow:hidden;background:radial-gradient(circle at 50% 40%,var(--tile),var(--bg) 140%)}
+.sk-img img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+.sk-shade{position:absolute;inset:0;background:#0d0a10;opacity:0;pointer-events:none}
+@media (max-width:760px){
+  .sk-card{grid-template-columns:1fr;grid-template-rows:minmax(0,1.25fr) auto}
+  .sk-img{order:-1}
+  .sk-txt{padding:18px 18px 20px;gap:12px}
+  .sk-txt h3{font-size:2rem}
+  .sk-txt p{display:none}
+  .sk-cnt{margin-bottom:8px}
+}
+@media (prefers-reduced-motion:reduce){
+  .sk-item{position:static;height:auto;margin-bottom:18px}
+  .sk-card{min-height:360px}
+}
 </style>
+<script>
+/* Preloader helper: locks scroll and holds the hero text until the stairs open. Skipped when the visitor prefers reduced motion. */
+(function(){
+  var r=document.documentElement;
+  if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+  r.classList.add('pre-on','pre-wait');
+  setTimeout(function(){r.classList.remove('pre-wait')},1750);
+  setTimeout(function(){r.classList.remove('pre-on');window.dispatchEvent(new Event('voirprelift'))},3100);
+})();
+</script>
 </head>
 <body>
+
+<div id="pre" aria-hidden="true">
+  <i class="pre-col" style="--i:0"></i><i class="pre-col" style="--i:1"></i><i class="pre-col" style="--i:2"></i><i class="pre-col" style="--i:3"></i><i class="pre-col" style="--i:4"></i><i class="pre-col" style="--i:5"></i>
+  <div class="pre-mid"><div class="brand"><span class="v">V<span class="o">O<i></i></span>IR</span><span class="j">JEWELS</span></div><span class="pre-bar"></span></div>
+</div>
 
 <div id="site">
 <div class="topbar"><div class="wrap"><span>Free shipping on orders above ₹1,999</span><span class="tr"><a href="mailto:voirjewels.official@gmail.com">voirjewels.official@gmail.com</a><i class="sep">&bull;</i><a href="https://instagram.com/thevoirjewels" target="_blank" rel="noopener">@thevoirjewels</a></span></div></div>
@@ -712,6 +777,11 @@ footer .brand .j{color:var(--foot-mut)}
       <div class="prog" aria-hidden="true"><i id="carProg"></i></div>
     </section>
 
+    <section class="block" id="stack" aria-labelledby="skTitle" hidden>
+      <div class="head"><h2 id="skTitle">Collections</h2><p class="lede">Scroll to move through each category. Tap a button to see every piece in it.</p></div>
+      <div class="sk" id="sk"></div>
+    </section>
+
     <section class="block" id="shop">
       <div class="head"><h2>The collection</h2><p class="lede" id="resultTxt" aria-live="polite"></p></div>
       <div class="filters">
@@ -780,7 +850,7 @@ footer .brand .j{color:var(--foot-mut)}
       <div><h3>Help</h3><ul><li>Sizing and care</li><li>Shipping</li><li>Contact</li></ul></div>
       <div><h3>Contact</h3><ul class="ct"><li><a href="mailto:voirjewels.official@gmail.com"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3.5 7l8.5 6 8.5-6"/></svg>voirjewels.official@gmail.com</a></li><li><a href="https://instagram.com/thevoirjewels" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="3.5" width="17" height="17" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.2" cy="6.8" r=".6" fill="currentColor"/></svg>@thevoirjewels</a></li><li><span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20l1.3-4A8 8 0 1 1 8 18.7L4 20z"/></svg>WhatsApp: coming soon</span></li><li><span><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg>Support 10 AM &ndash; 6 PM</span></li></ul></div>
     </div>
-    <div class="legal">© 2026 VoirJewels. All rights reserved.</div>
+    <div class="legal">© 2026 VoirJewels. All rights reserved. Preloader and card stack effects inspired by <a href="https://skiper-ui.com" target="_blank" rel="noopener">Skiper UI</a>.</div>
   </div>
 </footer>
 </div>
@@ -821,11 +891,9 @@ document.querySelectorAll('.js-theme').forEach(function(tb){tb.addEventListener(
 /* ---------- data ---------- */
 var METAL={silver:['#FFFFFF','#C9CED8','#7B8494']};
 var STONE={clear:['#ffffff','#cfe8ff','#8fb5e0'],ruby:['#ff9aa8','#d6203f','#7a0a22'],emerald:['#b4f2cf','#1fa466','#0a5a35'],sapphire:['#b9d0ff','#2b55c9','#12286e'],onyx:['#6a6574','#1f1b25','#000000'],pearl:['#ffffff','#f1e9ee','#c9bcc6']};
-/* Product photos live in images/ as 1.jpeg, 2.jpeg, 3.jpeg ... in the order of this list (the hero slides use their own files).
-   Columns: id, name, type, gender, new arrival (1/0), price in INR, stone, shape. Add a product by adding a row and the next numbered photo. */
-/* Products are loaded from data/products.json, which you edit in the CMS at /admin/ */
+/* Products come from the CMS: one JSON file per category in data/, edited at /admin/. */
 var BUILTIN=[],P=BUILTIN;
-/* One JSON file per category in data/, edited from /admin/. A missing file is simply skipped. */
+/* Category files to load from data/. A missing file is skipped. Keep in sync with admin/config.yml. */
 var FILES=['earrings','rings','anklets','bracelets','necklaces','pendants','statues','pooja','coins'];
 /* Category catalogue. n = name, d = description, k/c = closure label and text, s = sold as, home = home & gifting item */
 var TM={
@@ -1255,7 +1323,7 @@ function renderDrawer(){
         html+=drow(it.p,'<div class="d-qty"><button type="button" data-act="dec" data-id="'+id+'" aria-label="One fewer">&minus;</button><span aria-live="polite">'+it.q+'</span><button type="button" data-act="inc" data-id="'+id+'" aria-label="One more">+</button><button class="d-rm" type="button" data-act="rm" data-id="'+id+'">Remove</button></div>');
       });
       var left=1999-sub;
-      foot='<div class="d-sum"><span>Subtotal</span><b>'+inr(sub)+'</b></div><p class="d-note">'+(left>0?'Add '+inr(left)+' more for free shipping.':'Your order ships free.')+'</p><a class="btn" id="dOrder" href="'+orderLink(items,sub)+'">Send order by email</a><p class="d-note">Online payment is coming soon. Email us your bag and we will confirm your order and payment details.</p>';
+      foot='<div class="d-sum"><span>Subtotal</span><b>'+inr(sub)+'</b></div><p class="d-note">'+(left>0?'Add '+inr(left)+' more for free shipping.':'Your order ships free.')+'</p><a class="btn" href="'+orderLink(items,sub)+'">Send order by email</a><p class="d-note">Online payment is coming soon. Email us your bag and we will confirm your order and payment details.</p>';
     }
   }else{
     var w=wishItems();
@@ -1348,16 +1416,57 @@ hs.addEventListener('touchstart',function(e){tx=e.touches[0].clientX;hPause=true
 hs.addEventListener('touchend',function(e){var dx=e.changedTouches[0].clientX-tx;hPause=false;if(Math.abs(dx)>50)showSlide(hi+(dx<0?1:-1))},{passive:true});
 new IntersectionObserver(function(en){hVis=en[0].isIntersecting}).observe(hs);
 if(!still)setInterval(function(){
-  if(hPause||document.hidden||!hVis)return;
+  if(hPause||document.hidden||!hVis||root.classList.contains('pre-on'))return;
   hEl+=100;dots[hi].style.setProperty('--p',Math.min(100,hEl/HMS*100)+'%');
   if(hEl>=HMS)showSlide(hi+1);
 },100);
 dots[0].style.setProperty('--p','0%');
 
+/* ---------- sticky card stack (after Skiper UI skiper17) ----------
+   One card per category, using a real product photo from data/. Change SK_MAX for more or fewer cards. */
+var SK_MAX=5,skInit=false;
+function buildStack(){
+  var host=$('sk'),sec=$('stack'),h='',n=0;
+  host.innerHTML='';
+  ['earrings','rings','anklets','bracelets','necklaces','pendants','statues','pooja','coins'].forEach(function(t){
+    if(n>=SK_MAX)return;
+    var m=P.filter(function(p){return inType(p,t)&&p.img});if(!m.length)return;
+    var s=m[m.length>1?1:0],c=count(function(p){return inType(p,t)});
+    var d=TM[t]&&TM[t].d?TM[t].d:(GROUPS[t]?GROUPS[t].types.map(typeName).join(', ')+'.':'');
+    n++;
+    h+='<div class="sk-item"><article class="sk-card"><div class="sk-txt"><div><span class="sk-cnt">'+c+(c===1?' style':' styles')+'</span><h3>'+esc(typeName(t))+'</h3></div><p>'+esc(d)+'</p><div><button class="btn sk-go" type="button" data-t="'+t+'">Shop '+esc(typeName(t))+'</button></div></div><div class="sk-img"><img src="'+esc(s.img)+'" alt="'+esc(s.name)+'" loading="lazy" decoding="async"></div><span class="sk-shade"></span></article></div>';
+  });
+  sec.hidden=n<2;
+  if(n>=2){host.innerHTML=h;initStack()}
+}
+$('sk').addEventListener('click',function(e){var b=e.target.closest('.sk-go');if(b)set('type',b.getAttribute('data-t'),true)});
+function initStack(){
+  if(skInit||still||!window.gsap||!window.ScrollTrigger)return;
+  var host=$('sk'),cards=Array.prototype.slice.call(host.querySelectorAll('.sk-card')),item=host.querySelector('.sk-item');
+  if(cards.length<2||!item)return;
+  skInit=true;
+  gsap.registerPlugin(ScrollTrigger);
+  ScrollTrigger.config({ignoreMobileResize:true});
+  function H(){return item.offsetHeight}
+  function T(){return parseFloat(getComputedStyle(item).top)||100}
+  function top0(){return host.getBoundingClientRect().top+window.pageYOffset}
+  cards.forEach(function(c,i){
+    if(i===cards.length-1)return;
+    var st={trigger:host,start:function(){return top0()+(i+1)*H()-window.innerHeight},end:function(){return top0()+(i+1)*H()-T()},scrub:true};
+    gsap.to(c,{scale:.9,rotation:i%2?3:-3,ease:'none',scrollTrigger:st});
+    gsap.to(c.querySelector('.sk-shade'),{opacity:.4,ease:'none',scrollTrigger:st});
+  });
+  window.addEventListener('load',function(){ScrollTrigger.refresh()});
+  window.addEventListener('voirprelift',function(){ScrollTrigger.refresh()});
+}
+/* GSAP loads on the side so the shop never waits for it. If it fails, the stack still works without the tilt. */
+function loadJS(src,cb){var s=document.createElement('script');s.src=src;s.onload=cb;document.head.appendChild(s)}
+if(!still)loadJS('https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js',function(){loadJS('https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js',initStack)});
+
 function start(){
   /* drop saved bag/wish entries for products that no longer exist */
   [cart,wished].forEach(function(o,i){Object.keys(o).forEach(function(k){if(!findP(k))delete o[k]});svJ(i?'voir-wish':'voir-cart',o)});
-  buildTiles();buildCar();render();syncCounts();
+  buildTiles();buildCar();buildStack();render();syncCounts();
 }
 sync();ui();
 Promise.all(FILES.map(function(f){

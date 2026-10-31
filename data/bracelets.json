@@ -1,0 +1,13 @@
+{
+  "products": [
+    {
+      "isNew": false,
+      "stone": "none",
+      "name": "Infinity Charm Bracelet",
+      "gender": "women",
+      "type": "bracelets",
+      "price": 7,
+      "image": "images/10.jpeg"
+    }
+  ]
+}
