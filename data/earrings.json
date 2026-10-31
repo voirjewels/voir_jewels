@@ -1,3 +1,40 @@
 {
-  "products": []
+  "products": [
+    {
+      "purity": "925",
+      "gender": "men",
+      "stone": "none",
+      "price": 299,
+      "name": "Men earring",
+      "mrp": 693,
+      "isNew": false,
+      "type": "hoops",
+      "image": "images/12.jpeg",
+      "show": true
+    },
+    {
+      "purity": "925",
+      "gender": "women",
+      "stone": "none",
+      "price": 199,
+      "name": "earing2.0",
+      "mrp": 599,
+      "isNew": false,
+      "type": "hoops",
+      "image": "images/Elegant Dark Red & Glitter Gold Leaf Stud Earrings.jpeg",
+      "show": true
+    },
+    {
+      "purity": "925",
+      "gender": "women",
+      "stone": "none",
+      "price": 99,
+      "name": "Earing",
+      "mrp": 199,
+      "isNew": false,
+      "type": "hoops",
+      "image": "images/CAROLINE Simulated Diamond Bridal Statement Earrings.jpeg",
+      "show": true
+    }
+  ]
 }
