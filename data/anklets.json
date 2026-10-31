@@ -1,3 +1,16 @@
 {
-  "products": []
+  "products": [
+    {
+      "purity": "925",
+      "gender": "women",
+      "stone": "none",
+      "price": 99,
+      "name": "Payal",
+      "mrp": 393,
+      "isNew": false,
+      "type": "anklets",
+      "image": "images/3.jpeg",
+      "show": true
+    }
+  ]
 }
