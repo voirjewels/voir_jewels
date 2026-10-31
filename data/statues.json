@@ -1,3 +1,16 @@
 {
-  "products": []
+  "products": [
+    {
+      "purity": "925",
+      "gender": "home",
+      "stone": "none",
+      "price": 199,
+      "name": "Ganesh Ji statue",
+      "mrp": 499,
+      "isNew": false,
+      "type": "statues",
+      "image": "images/9.jpeg",
+      "show": true
+    }
+  ]
 }
