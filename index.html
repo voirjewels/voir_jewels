@@ -610,7 +610,7 @@ footer .brand .j{color:var(--foot-mut)}
    The overlay hides itself with CSS alone, so a script error can never trap the page. */
 html.pre-on{overflow:hidden;scrollbar-gutter:stable}
 html.pre-wait .hs-slide.on .ch,html.pre-wait .hs-slide.on .hs-up{animation-play-state:paused}
-#pre{position:fixed;inset:0;z-index:1000;display:grid;place-items:center;overflow:hidden;animation:preGone .01s linear 3.1s forwards}
+#pre{position:fixed;inset:0;z-index:1000;pointer-events:none;display:grid;place-items:center;overflow:hidden;animation:preGone .01s linear 3.1s forwards}
 @keyframes preGone{to{visibility:hidden}}
 .pre-col{position:absolute;top:0;bottom:0;left:calc(var(--i)*(100%/6));width:calc(100%/6 + 1px)}
 .pre-col::before,.pre-col::after{content:"";position:absolute;left:0;right:0;height:calc(50% + 1px);background:#0d0a10;box-shadow:inset 1px 0 0 rgba(227,190,123,.14);will-change:transform;animation-duration:.85s;animation-timing-function:cubic-bezier(.76,0,.24,1);animation-fill-mode:forwards}
@@ -663,7 +663,7 @@ html.pre-wait .hs-slide.on .ch,html.pre-wait .hs-slide.on .hs-up{animation-play-
   if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;
   r.classList.add('pre-on','pre-wait');
   setTimeout(function(){r.classList.remove('pre-wait')},1750);
-  setTimeout(function(){r.classList.remove('pre-on');window.dispatchEvent(new Event('voirprelift'))},3100);
+  setTimeout(function(){r.classList.remove('pre-on');var p=document.getElementById('pre');if(p&&p.parentNode)p.parentNode.removeChild(p);window.dispatchEvent(new Event('voirprelift'))},3200);
 })();
 </script>
 </head>
