@@ -1,3 +1,16 @@
 {
-  "products": []
+  "products": [
+    {
+      "purity": "925",
+      "gender": "women",
+      "stone": "none",
+      "price": 999,
+      "name": "pendant",
+      "mrp": 1999,
+      "isNew": false,
+      "type": "pendants",
+      "image": "images/7.jpeg",
+      "show": true
+    }
+  ]
 }
